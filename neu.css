@@ -259,18 +259,47 @@ body {
 /*Phones*/
 @media only screen and (max-width: 600px) {
     .neu {
-        grid-template-columns: 3% 15% auto 15% 3%;
-        grid-template-rows: 6% 6% auto 15%;
-        grid-gap: .5%;
+        grid-template-columns: 2% 15% auto 15% 2%;
+        /*grid-template-rows: 10% 6% auto 15%;*/
+        grid-template-rows: 10% 8% auto auto auto;
+        grid-gap: .3%;
+    }
+    .neu-nav {
+        align-items: center;
+    }
+    .neu-section {
+        grid-column: 2 / 5;
+    }
+    .neu-aside {
+        grid-column: 2 / 5;
+        grid-row: 4 / 5;
+        
+        margin-top: 1%;
+        margin-left: 0;
+    }
+    .neu-footer {
+        grid-row: 5 / 5;
     }
 }
 /*Tablets*/
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 1200px) and (min-width: 601px) {
+    .neu {
+        grid-template-columns: 3% 15% auto 15% 3%;
+        /*grid-template-rows: 10% 6% auto 15%;*/
+        grid-template-rows: 10% 8% auto auto auto;
+        grid-gap: .5%;
+    }
+    .neu-section {
+        grid-column: 2 / 5;
+    }
     .neu-aside {
-        grid-column: 3 / 4;
-        grid-row: 3 / 4;
-    
-        margin-top: 7%;
-        margin-left: 20%;
+        grid-column: 2 / 5;
+        grid-row: 4 / 5;
+        
+        margin-top: 1%;
+        margin-left: 0;
+    }
+    .neu-footer {
+        grid-row: 5 / 5;
     }
 }
