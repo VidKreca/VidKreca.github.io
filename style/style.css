@@ -49,6 +49,7 @@ a:hover {
     transform: scale(1.03);
     display: inline-block;
     color: #b0b0ff;
+    transition: all .3s;
 }
 ul {
     list-style-type: none;
