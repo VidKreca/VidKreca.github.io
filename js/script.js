@@ -48,11 +48,15 @@ const canvas = document.querySelector('canvas.webgl');
 const scene = new THREE.Scene();
 const material = new THREE.MeshToonMaterial({color: '#ffeded'});
 
-// Create objects
+// Create objects, EdgesGeometry or WireframeGeometry
+let cubeGeometry = new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 1, 1));
+let torusGeometry = new THREE.WireframeGeometry(new THREE.TorusGeometry(1, 0.4, 16, 60));   
+let coneGeometry = new THREE.WireframeGeometry(new THREE.ConeGeometry(1, 2, 32));
+let lineMaterial = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 2});
 const meshes = [
-    new THREE.Mesh(new THREE.TorusGeometry(1, 0.4, 16, 60), material),
-    new THREE.Mesh(new THREE.ConeGeometry(1, 2, 32), material),
-    new THREE.Mesh(new THREE.TorusKnotGeometry(0.8, 0.35, 100, 16), material)
+    new THREE.LineSegments(torusGeometry, lineMaterial),
+    new THREE.LineSegments(cubeGeometry, lineMaterial),
+    new THREE.LineSegments(coneGeometry, lineMaterial),
 ];
 meshes[0].position.y = -config.objectsDistance * 0;
 meshes[1].position.y = -config.objectsDistance * 1;
