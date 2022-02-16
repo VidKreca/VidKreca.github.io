@@ -1,12 +1,41 @@
 /**
  * Config
  */
-const objectsDistance = 4;
-const particlesCount = 200;
+ const config = {
+    objectsDistance: 4,
+    meshOffset: 1.5,
+    particles: {
+        count: 300,
+        size: 0.03,
+        color: '#ffeded'
+    },
+    camera: {
+        fov: 35,
+        z: 6
+    },
+    animation: {
+        meshes: {
+            rotation: {
+                x: 0.1,
+                y: 0.12
+            }
+        }
+    },
+    mobile: {
+        isMobile: false,
+        maxWidth: 1000,
+        xPosition: 0
+    }
+};
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
 };
+const cursor = {
+    x: 0, 
+    y: 0
+};
+
 
 
 /**
@@ -22,28 +51,27 @@ const meshes = [
     new THREE.Mesh(new THREE.ConeGeometry(1, 2, 32), material),
     new THREE.Mesh(new THREE.TorusKnotGeometry(0.8, 0.35, 100, 16), material)
 ];
-meshes[0].position.y = -objectsDistance * 0;
-meshes[1].position.y = -objectsDistance * 1;
-meshes[2].position.y = -objectsDistance * 2;
-meshes[0].position.x = 2;
-meshes[1].position.x = -2;
-meshes[2].position.x = 2;
+meshes[0].position.y = -config.objectsDistance * 0;
+meshes[1].position.y = -config.objectsDistance * 1;
+meshes[2].position.y = -config.objectsDistance * 2;
+meshes[0].position.x = config.meshOffset;
+meshes[1].position.x = -1 * config.meshOffset;
+meshes[2].position.x = config.meshOffset;
 scene.add(meshes[0], meshes[1], meshes[2]);
 
 // Create particles
-const particlePositions = new Float32Array(particlesCount * 3);
-for(let i = 0; i < particlesCount; i++)
-{
+const particlePositions = new Float32Array(config.particles.count * 3);  // Flat 3D array for particle positions
+for (let i = 0; i < config.particles.count; i++) {
     particlePositions[i * 3 + 0] = (Math.random() - 0.5) * 10;
-    particlePositions[i * 3 + 1] = objectsDistance * 0.5 - Math.random() * objectsDistance * meshes.length;
+    particlePositions[i * 3 + 1] = config.objectsDistance * 0.5 - Math.random() * config.objectsDistance * meshes.length;
     particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 10;
 }
 const particlesGeometry = new THREE.BufferGeometry();
 particlesGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
 const particlesMaterial = new THREE.PointsMaterial({
-    color: '#ffeded',
+    color: config.particles.color,
     sizeAttenuation: true,
-    size: 0.03
+    size: config.particles.size
 });
 const particles = new THREE.Points(particlesGeometry, particlesMaterial);
 scene.add(particles);
@@ -56,8 +84,8 @@ scene.add(directionalLight);
 // Camera
 const cameraGroup = new THREE.Group();
 scene.add(cameraGroup);
-const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 100);
-camera.position.z = 6;
+const camera = new THREE.PerspectiveCamera(config.camera.fov, sizes.width / sizes.height, 0.1, 100);
+camera.position.z = config.camera.z;
 cameraGroup.add(camera);
 
 // Renderer
@@ -74,20 +102,24 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
  */
 window.addEventListener('resize', () => {
     // Update window sizes
-    sizes.width = window.innerWidth
-    sizes.height = window.innerHeight
+    sizes.width = window.innerWidth;
+    sizes.height = window.innerHeight;
+
+    // Update isMobile flag
+    config.mobile.isMobile = (sizes.width < config.mobile.maxWidth);
 
     // Update camera
-    camera.aspect = sizes.width / sizes.height
-    camera.updateProjectionMatrix()
+    camera.aspect = sizes.width / sizes.height;
+    camera.updateProjectionMatrix();
 
     // Update renderer
-    renderer.setSize(sizes.width, sizes.height)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 })
 
 /**
- * Scrolling handler
+ * Scrolling handler, 
+ * animates objects when they're reached.
  */
 let scrollY = window.scrollY;
 let currentSection = 0;
@@ -100,51 +132,52 @@ window.addEventListener('scroll', () => {
         gsap.to(
             meshes[currentSection].rotation,
             {
-                duration: 1.5,
+                duration: 10,
                 ease: 'power2.inOut',
                 x: '+=6',
                 y: '+=3'
             }
         );
     }
-})
+});
 
 /**
- * Cursor handler
+ * Cursor handler,
+ * updates cursor position object.
  */
-const cursor = {x: 0, y: 0};
 window.addEventListener('mousemove', (event) => {
     cursor.x = event.clientX / sizes.width - 0.5;
     cursor.y = event.clientY / sizes.height - 0.5;
 })
 
 /**
- * Animate
+ * Animation
  */
 const clock = new THREE.Clock();
 let previousTime = 0;
 const animate = () => {
+    // Get delta time
     const elapsedTime = clock.getElapsedTime();
     const deltaTime = elapsedTime - previousTime;
     previousTime = elapsedTime;
 
     // Animate meshes
-    for (const mesh of meshes) {
-        mesh.rotation.x += deltaTime * 0.1;
-        mesh.rotation.y += deltaTime * 0.12;
+    for (const [index, mesh] of meshes.entries()) {
+        mesh.rotation.x += deltaTime * config.animation.meshes.rotation.x;
+        mesh.rotation.y += deltaTime * config.animation.meshes.rotation.y;
+
+        // Toggle between default and mobile mesh positions
+        mesh.position.x = (config.mobile.isMobile) ? config.mobile.xPosition : ((index % 2 == 0) ? config.meshOffset : -1*config.meshOffset);
     }
 
     // Animate camera
-    camera.position.y = - scrollY / sizes.height * objectsDistance;
+    camera.position.y = -scrollY / sizes.height * config.objectsDistance;
     const parallaxX = cursor.x * 0.5;
-    const parallaxY = - cursor.y * 0.5;
-    cameraGroup.position.x += (parallaxX - cameraGroup.position.x) * 5 * deltaTime;
-    cameraGroup.position.y += (parallaxY - cameraGroup.position.y) * 5 * deltaTime;
+    const parallaxY = -cursor.y * 0.5;
+    cameraGroup.position.x += deltaTime * (parallaxX - cameraGroup.position.x) * 5;
+    cameraGroup.position.y += deltaTime * (parallaxY - cameraGroup.position.y) * 5;
 
-    // Render
     renderer.render(scene, camera);
-
-    // Call tick again on the next frame
     window.requestAnimationFrame(animate);
 }
 animate();
