@@ -25,6 +25,9 @@
         isMobile: false,
         maxWidth: 1000,
         xPosition: 0
+    },
+    getXPosition: (isEven) => {
+        return (config.mobile.isMobile) ? config.mobile.xPosition : (isEven ? config.meshOffset : -1 * config.meshOffset);
     }
 };
 const sizes = {
@@ -54,9 +57,9 @@ const meshes = [
 meshes[0].position.y = -config.objectsDistance * 0;
 meshes[1].position.y = -config.objectsDistance * 1;
 meshes[2].position.y = -config.objectsDistance * 2;
-meshes[0].position.x = config.meshOffset;
-meshes[1].position.x = -1 * config.meshOffset;
-meshes[2].position.x = config.meshOffset;
+meshes[0].position.x = config.getXPosition(true);
+meshes[1].position.x = config.getXPosition(false);
+meshes[2].position.x = config.getXPosition(true);
 scene.add(meshes[0], meshes[1], meshes[2]);
 
 // Create particles
@@ -167,7 +170,7 @@ const animate = () => {
         mesh.rotation.y += deltaTime * config.animation.meshes.rotation.y;
 
         // Toggle between default and mobile mesh positions
-        mesh.position.x = (config.mobile.isMobile) ? config.mobile.xPosition : ((index % 2 == 0) ? config.meshOffset : -1*config.meshOffset);
+        mesh.position.x = config.getXPosition(index % 2 == 0);
     }
 
     // Animate camera
