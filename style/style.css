@@ -36,6 +36,30 @@ html {
     color: #cdcde0;
     font-size: 5vmin;
 }
+.section p {
+    color: #cdcde0;
+    font-size: 3vmin;
+}
+a {
+    color: #8888ff;
+    text-decoration: none;
+    font-size: 3vmin;
+}
+a:hover {
+    transform: scale(1.03);
+    display: inline-block;
+    color: #b0b0ff;
+}
+ul {
+    list-style-type: none;
+    font-size: 3vmin;
+}
+ul li {
+    color: #cdcde0;
+}
+ul li a {
+    font-size: inherit;
+}
 section:nth-child(odd) {
     align-items: flex-end;
 }
