@@ -16,7 +16,6 @@ html {
     left: 0;
 }
 
-
 .section {
     display: flex;
     flex-direction: column;
@@ -26,24 +25,23 @@ html {
     padding-left: 10%;
     padding-right: 10%;
     will-change: transform;
+    font-size: 3vmin;
 }
 .section h1 {
     color: #f9f8ff;
     text-transform: uppercase;
-    font-size: 7vmin;
+    font-size: 2.5em;
 }
 .section h2 {
     color: #cdcde0;
-    font-size: 5vmin;
+    font-size: 1.5em;
 }
 .section p {
     color: #cdcde0;
-    font-size: 3vmin;
 }
 a {
     color: #8888ff;
     text-decoration: none;
-    font-size: 3vmin;
 }
 a:hover {
     transform: scale(1.03);
@@ -53,7 +51,6 @@ a:hover {
 }
 ul {
     list-style-type: none;
-    font-size: 3vmin;
 }
 ul li {
     color: #cdcde0;
@@ -63,4 +60,14 @@ ul li a {
 }
 section:nth-child(odd) {
     align-items: flex-end;
+}
+
+
+@media
+only screen and (min-device-pixel-ratio: 2) and (max-width: 700px),
+only screen and (min-resolution: 192dpi) and (max-width: 700px),
+only screen and (min-resolution: 2dppx) and (max-width: 700px) {
+    .section {
+        font-size: 5vmin;
+    }
 }

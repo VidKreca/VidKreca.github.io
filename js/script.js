@@ -13,6 +13,7 @@ console.log(` _    _          _   _
  const config = {
     objectsDistance: 4,
     meshOffset: 1.5,
+    materialColor: "#fff",
     particles: {
         count: 300,
         size: 0.03,
@@ -24,7 +25,7 @@ console.log(` _    _          _   _
     },
     animation: {
         meshes: {
-            rotation: {
+            rotation: {     // Rotation speeds
                 x: 0.1,
                 y: 0.12
             }
@@ -32,8 +33,9 @@ console.log(` _    _          _   _
     },
     mobile: {
         isMobile: false,
-        maxWidth: 1000,
-        xPosition: 0
+        maxWidth: 700,      // Breakpoint
+        xPosition: 0,        // Where the objects should be on mobile 
+        materialColor: "#000"
     },
     getXPosition: (isEven) => {
         return (config.mobile.isMobile) ? config.mobile.xPosition : (isEven ? config.meshOffset : -1 * config.meshOffset);
@@ -55,13 +57,12 @@ const cursor = {
  */ 
 const canvas = document.querySelector('canvas.webgl');
 const scene = new THREE.Scene();
-const material = new THREE.MeshToonMaterial({color: '#ffeded'});
 
 // Create objects, EdgesGeometry or WireframeGeometry
 let cubeGeometry = new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 1, 1));
 let torusGeometry = new THREE.WireframeGeometry(new THREE.TorusGeometry(1, 0.4, 16, 60));   
 let coneGeometry = new THREE.WireframeGeometry(new THREE.ConeGeometry(1, 2, 32));
-let lineMaterial = new THREE.LineBasicMaterial({color: 0xffffff, linewidth: 2});
+let lineMaterial = new THREE.LineBasicMaterial({color: config.materialColor, linewidth: 2});
 const meshes = [
     new THREE.LineSegments(torusGeometry, lineMaterial),
     new THREE.LineSegments(cubeGeometry, lineMaterial),
@@ -93,7 +94,7 @@ const particles = new THREE.Points(particlesGeometry, particlesMaterial);
 scene.add(particles);
 
 // Lights
-const directionalLight = new THREE.DirectionalLight('#ffffff', 1);
+const directionalLight = new THREE.DirectionalLight('#fff', 1);
 directionalLight.position.set(1, 1, 0);
 scene.add(directionalLight);
 
@@ -113,6 +114,12 @@ renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 
+// Mobile config before resize event listener
+config.mobile.isMobile = (sizes.width < config.mobile.maxWidth);
+if (config.mobile.isMobile) 
+    lineMaterial.color.set(config.mobile.materialColor);
+
+
 /**
  * Resizing handler
  */
@@ -123,6 +130,9 @@ window.addEventListener('resize', () => {
 
     // Update isMobile flag
     config.mobile.isMobile = (sizes.width < config.mobile.maxWidth);
+
+    // update material color
+    lineMaterial.color.set((config.mobile.isMobile) ? config.mobile.materialColor : config.materialColor);
 
     // Update camera
     camera.aspect = sizes.width / sizes.height;
