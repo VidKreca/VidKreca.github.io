@@ -14,6 +14,7 @@ console.log(` _    _          _   _
     objectsDistance: 4,
     meshOffset: 1.5,
     materialColor: "#fff",
+    scrollIndicatorHideDistance: 300,
     particles: {
         count: 300,
         size: 0.03,
@@ -152,6 +153,10 @@ let currentSection = 0;
 window.addEventListener('scroll', () => {
     scrollY = window.scrollY;
     const newSection = Math.round(scrollY / sizes.height);
+
+    // Hide scroll indicator after a set distance scrolled
+    if (scrollY > config.scrollIndicatorHideDistance)
+        document.querySelector(".scroll-indicator").style.opacity = 0;
 
     if (newSection != currentSection) {
         currentSection = newSection;

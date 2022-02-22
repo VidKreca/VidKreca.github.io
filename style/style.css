@@ -16,6 +16,45 @@ html {
     left: 0;
 }
 
+/* Scroll indicator */
+.scroll-indicator {
+    width: 30px;
+    height: 50px;
+    border: 1px solid gray;
+    border-radius: 10px;
+
+    position: absolute;
+    top: 90vh;
+    right: calc(50vw - 15px);
+
+    display: flex;
+    justify-content: center;
+
+    transition: opacity 1s;
+}
+.scroll-indicator .dot {
+    background-color: gray;
+    width: 5px;
+    height: 5px;
+    border-radius: 2px;
+
+    margin-top: 6px;
+
+    animation: scroll-dot-animation 2s infinite;
+}
+@keyframes scroll-dot-animation {
+    0% {
+        margin-top: 6px;
+    }
+    90% {
+        margin-top: 16px;
+    }
+    100% {
+        margin-top: 6px;
+    }
+}
+
+
 .section {
     display: flex;
     flex-direction: column;
@@ -58,7 +97,7 @@ ul li {
 ul li a {
     font-size: inherit;
 }
-section:nth-child(odd) {
+section:nth-child(even) {
     align-items: flex-end;
 }
 
