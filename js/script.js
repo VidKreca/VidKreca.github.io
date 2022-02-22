@@ -46,9 +46,12 @@ const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
 };
-const cursor = {
+const mouse = {
     x: 0, 
-    y: 0
+    y: 0,
+    mouseDown: false,
+    deltaX: 0,
+    deltaY: 0
 };
 
 
@@ -177,9 +180,29 @@ window.addEventListener('scroll', () => {
  * updates cursor position object.
  */
 window.addEventListener('mousemove', (event) => {
-    cursor.x = event.clientX / sizes.width - 0.5;
-    cursor.y = event.clientY / sizes.height - 0.5;
-})
+    if (mouse.mouseDown) {
+        mouse.deltaX = event.clientX - mouse.x;
+        mouse.deltaY = event.clientY - mouse.y;
+        updateRotation();
+    }
+
+    mouse.x = event.clientX / sizes.width - 0.5;
+    mouse.y = event.clientY / sizes.height - 0.5;
+});
+window.addEventListener('mousedown', () => {
+    mouse.mouseDown = true;
+}, false);
+window.addEventListener('mouseup', () => {
+    mouse.mouseDown = false;
+}, false);
+
+
+//const group = new THREE.Group();
+//group.add(meshes[0]);
+function updateRotation() {
+    meshes[0].rotation.x += mouse.deltaX / 40000;
+    //meshes[0].rotation.y += mouse.deltaY / 10000;
+}
 
 /**
  * Animation
@@ -203,8 +226,8 @@ const animate = () => {
 
     // Animate camera
     camera.position.y = -scrollY / sizes.height * config.objectsDistance;
-    const parallaxX = cursor.x * 0.5;
-    const parallaxY = -cursor.y * 0.5;
+    const parallaxX = mouse.x * 0.5;
+    const parallaxY = -mouse.y * 0.5;
     cameraGroup.position.x += deltaTime * (parallaxX - cameraGroup.position.x) * 5;
     cameraGroup.position.y += deltaTime * (parallaxY - cameraGroup.position.y) * 5;
 
