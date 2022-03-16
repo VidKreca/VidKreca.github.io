@@ -60,12 +60,12 @@ const canvas = document.querySelector('canvas.webgl');
 const scene = new THREE.Scene();
 
 // Create objects, EdgesGeometry or WireframeGeometry
-let cubeGeometry = new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 1, 1));
-let torusGeometry = new THREE.WireframeGeometry(new THREE.TorusGeometry(1, 0.4, 16, 60));   
-let coneGeometry = new THREE.WireframeGeometry(new THREE.ConeGeometry(1, 2, 32));
-let lineMaterial = new THREE.LineBasicMaterial({color: config.materialColor, linewidth: 2});
+const icosahedronGeometry = new THREE.WireframeGeometry(new THREE.IcosahedronGeometry(1, 1, 1));
+const cubeGeometry = new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 1, 1));
+const coneGeometry = new THREE.WireframeGeometry(new THREE.ConeGeometry(1, 2, 32));
+const lineMaterial = new THREE.LineBasicMaterial({color: config.materialColor, linewidth: 2});
 const meshes = [
-    new THREE.LineSegments(torusGeometry, lineMaterial),
+    new THREE.LineSegments(icosahedronGeometry, lineMaterial),
     new THREE.LineSegments(cubeGeometry, lineMaterial),
     new THREE.LineSegments(coneGeometry, lineMaterial),
 ];
@@ -132,7 +132,7 @@ window.addEventListener('resize', () => {
     // Update isMobile flag
     config.mobile.isMobile = (sizes.width < config.mobile.maxWidth);
 
-    // update material color
+    // Update material color
     lineMaterial.color.set((config.mobile.isMobile) ? config.mobile.materialColor : config.materialColor);
 
     // Update camera
