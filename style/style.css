@@ -2,11 +2,23 @@
     margin: 0;
     padding: 0;
     font-family: 'Cabin', sans-serif;
+    box-sizing: border-box;
+}
+
+:root {
+    --background-start: rgba(0,212,255,1);
+    --background-middle: rgba(9,9,121,1);
+    --background-end: rgba(2,0,36,1);
+
+    --text-primary: #f9f8ff;
+    --text-secondary: #cdcde0;
+    --text-link: #8888ff;
+    --text-link-hover: #b0b0ff;
 }
 
 html {
-    background: rgb(2,0,36);
-    background: linear-gradient(13deg, rgba(2,0,36,1) 26%, rgba(9,9,121,1) 58%, rgba(0,212,255,1) 100%);
+    background: var(--background-end);
+    background: linear-gradient(13deg, var(--background-end) 26%, var(--background-middle) 58%, var(--background-start) 100%);
 }
 
 /* Fix the canvas across the entire screen */
@@ -67,32 +79,32 @@ html {
     font-size: 3vmin;
 }
 .section h1 {
-    color: #f9f8ff;
+    color: var(--text-primary);
     text-transform: uppercase;
     font-size: 2.5em;
 }
 .section h2 {
-    color: #cdcde0;
+    color: var(--text-secondary);
     font-size: 1.5em;
 }
 .section p {
-    color: #cdcde0;
+    color: var(--text-secondary);
 }
 a {
-    color: #8888ff;
+    color: var(--text-link);
     text-decoration: none;
 }
 a:hover {
     transform: scale(1.03);
     display: inline-block;
-    color: #b0b0ff;
+    color: var(--text-link-hover);
     transition: all .3s;
 }
 ul {
     list-style-type: none;
 }
 ul li {
-    color: #cdcde0;
+    color: var(--text-secondary);
 }
 ul li a {
     font-size: inherit;
