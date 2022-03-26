@@ -7,7 +7,17 @@ console.log(`%c
 |_|  |_|  \\___| |_| |_|  \\___/ 
                                
 `,
-"color: rgba(0,212,255,1); font-size: 15px; line-height: 15px;");
+    `color: rgba(0,212,255,1); 
+    font-size: 15px; 
+    line-height: 15px;
+    text-shadow: 
+        3px 3px 0 rgba(0, 212, 255, .4), 
+        6px 6px 0 rgba(0, 157, 189, .3),
+        9px 9px 0 rgba(0, 119, 143, .2),
+        12px 12px 0 rgba(0, 81, 97, .1), 
+        15px 15px 0 rgba(0, 38, 46, .05);`
+);
+
 
 /**
  * Config
