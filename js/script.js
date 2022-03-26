@@ -162,15 +162,8 @@ window.addEventListener('scroll', () => {
 
     if (newSection != currentSection) {
         currentSection = newSection;
-        gsap.to(
-            meshes[currentSection].rotation,
-            {
-                duration: 10,
-                ease: 'power2.inOut',
-                x: '+=6',
-                y: '+=3'
-            }
-        );
+
+        
     }
 });
 
