@@ -19,6 +19,7 @@
 html {
     background: var(--background-end);
     background: linear-gradient(13deg, var(--background-end) 26%, var(--background-middle) 58%, var(--background-start) 100%);
+    overflow-x: hidden;
 }
 
 /* Fix the canvas across the entire screen */
@@ -68,6 +69,7 @@ html {
 
 
 .section {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center !important;
@@ -111,6 +113,26 @@ ul li a {
 }
 section:nth-child(even) {
     align-items: flex-end;
+}
+
+
+/* Slide-in animation */
+.offscreen {
+    right: -100%;
+}
+.slide-in {
+    animation: slide-in 1.5s ease-in-out;
+}
+@keyframes slide-in {
+    0% {
+        transform: skew(-20deg);
+        opacity: 0;
+        right: -100%;
+    }
+    100% {
+        opacity: 1;
+        right: 0;
+    }
 }
 
 
