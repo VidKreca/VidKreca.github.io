@@ -21,6 +21,19 @@ html {
     background: linear-gradient(13deg, var(--background-end) 26%, var(--background-middle) 58%, var(--background-start) 100%);
 }
 
+/* Scrollbar styling */
+body {
+    overflow: overlay;
+}
+::-webkit-scrollbar {
+    width: 1em;
+    background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 1em;
+}
+
 /* Fix the canvas across the entire screen */
 .webgl {
     position: fixed;
