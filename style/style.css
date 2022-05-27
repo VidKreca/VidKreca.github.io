@@ -80,6 +80,22 @@ body {
 }
 
 
+/* Terminal button */
+.console-button {
+    position: absolute;
+    top: 0;
+    right: 1.5em;
+    z-index: 999;
+}
+.console-button a {
+    display: inline-block;
+}
+.console-button img {
+    display: block;
+    width: 2em;
+}
+
+
 .section {
     display: flex;
     flex-direction: column;
@@ -122,7 +138,7 @@ ul li {
 ul li a {
     font-size: inherit;
 }
-section:nth-child(even) {
+section:nth-child(odd) {
     align-items: flex-end;
 }
 
