@@ -4,6 +4,7 @@ const TYPES = ["error", "warning", "success", "info", "special"];
 const START_TEXT = 
 `Welcome to my console.
 Use the 'help' command for a list of available commands.
+Use the 'exit' command to go back.
 
 `;
 const REPOS = ["QuickSorts", "the-place"];
