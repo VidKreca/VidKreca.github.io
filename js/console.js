@@ -17,6 +17,7 @@ const shutdown = document.querySelector(".shutdown");
 
 /** VARIABLES */
 const commandHistory = [];
+let commandIndex = 0;
 const commands = {
   "help": () => {
     return {
@@ -58,7 +59,7 @@ const commands = {
   },
   "secret": () => {
     return {
-      text: `very secret`,
+      text: `Unlisted commands: echo, cd, pwd, ls, shutdown`,
       type: "special",
       showPrefix: false
     }
@@ -106,8 +107,18 @@ input.addEventListener("keydown", (e) => {
     const inputValue = input.value;
     input.value = "";
     command(inputValue);
+    commandIndex = null;
   }
-  // TODO - add support for arrow up and down
+  else if (e.key === "ArrowUp") {
+    if (commandHistory.length <= commandIndex) return;
+    commandIndex++;
+    input.value = commandHistory[commandHistory.length - commandIndex];
+  }
+  else if (e.key === "ArrowDown") {
+    if (commandIndex <= 0) return;
+    commandIndex--;
+    input.value = commandHistory[commandHistory.length - commandIndex] ?? "";
+  }
 });
 document.body.addEventListener("keydown", () => {
   input.focus();
