@@ -3,8 +3,9 @@ const PREFIX = "guest@IE-7 $ ";
 const TYPES = ["error", "warning", "success", "info", "special"];
 const START_TEXT = 
 `Welcome to my console.
-Use the 'help' command for a list of available commands.
-Use the 'exit' command to go back.
+Useful commands:
+  'help' for a list of available commands
+  'exit' to go back
 
 `;
 const REPOS = ["QuickSorts", "the-place"];
@@ -83,11 +84,14 @@ const commands = {
   "clear": () => {
     commandsContainer.innerHTML = "";
   },
+  "cls": () => "clear",
   "exit": () => {
     history.back();
   },
   "shutdown": () => {
     shutdown.classList.remove("hidden");
+
+    setTimeout(() => shutdown.classList.add("hidden"), 8000);
   },
   "invalid": (command) => {
     return {
@@ -211,19 +215,15 @@ async function showGithubInfo() {
 
   const createdAt = new Date(user.created_at);
   const createdAtPretty = `${createdAt.getDate().toString().padStart(2, "0")}.${createdAt.getMonth().toString().padStart(2, "0")}.${createdAt.getFullYear().toString().padStart(2, "0")}`
-  const text = `
-    <div class="github-command">
-      <div class="profile">
+  const text = `<div class="github-command"><div class="profile">
         <img src="${user.avatar_url}">
         <a href="${user.html_url}" target="_blank">My profile</a>
       </div>
       <div class="info">
         <h4>${user.public_repos} public repos</h4>
         <h4>created at ${createdAtPretty}</h4>
-      </div>
-      ${reposText}
-    </div>
-    `;
+      </div>${reposText}</div>
+      `;
     appendCommand(createCommandElement(text, "special", false));
 
   toggleInput(false);
