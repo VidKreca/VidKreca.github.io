@@ -93,7 +93,10 @@ const commands = {
   "shutdown": () => {
     shutdown.classList.remove("hidden");
 
-    setTimeout(() => shutdown.classList.add("hidden"), 8000);
+    setTimeout(() => {
+      shutdown.classList.add("hidden");
+      appendCommand(createCommandElement("Could not shut down the computer.", "error", false));
+    }, 6000);
   },
   "theme": (args) => {
     if (args.length === 0) {
