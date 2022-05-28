@@ -1,5 +1,11 @@
 /** CONSTANTS */
-const PREFIX = "$ ";
+const PREFIX = "guest@internet-explorer-7 $ ";
+const TYPES = ["error", "warning", "success", "info", "special"];
+const START_TEXT = 
+`Welcome to my console.
+Use the 'help' command for a list of available commands.
+
+`;
 
 /** ELEMENTS */
 const input = document.querySelector("#input");
@@ -12,20 +18,66 @@ const commands = {
   "help": () => {
     return {
       text: `AVAILABLE COMMANDS:
-        help
-        about
-        contact
+  help
+  about
+  contact
+  clear
       `,
-      type: "info"
+      type: "info",
+      showPrefix: false
     };
+  },
+  "about": () => {
+    return {
+      text: `       ________________________________
+      |                                |
+      |     Hello, I'm Vid Kreča,      |
+      |     a full-stack developer     |
+      |     from Maribor, Slovenia.    |
+      |________________________________|
+      `,
+      type: "info",
+      showPrefix: false
+    };
+  },
+  "contact": () => {
+    return {
+      text: `Not looking for new friends right now...`,
+      type: "warning",
+      showPrefix: false
+    }
+  },
+  "secret": () => {
+    return {
+      text: `very secret`,
+      type: "special",
+      showPrefix: false
+    }
+  },
+  "cd": () => {
+    return {
+      text: `No, I did not implement a file system... yet.`,
+      type: "error",
+      showPrefix: false
+    }
+  },
+  "pwd": () => "cd",
+  "ls": () => "cd",
+  "clear": () => {
+    commandsContainer.innerHTML = "";
   },
   "invalid": () => {
     return {
       text: `Unknown command, please use 'help' for a list of commands.`,
-      type: "error"
+      type: "error",
+      showPrefix: false
     };
   }
 };
+
+/** DEFAULT ELEMENT SETUP */
+prefix.textContent = PREFIX;
+if (START_TEXT) commandsContainer.appendChild(createCommandElement(START_TEXT, "special", false));
 
 /** EVENT LISTENERS */
 input.addEventListener("keydown", (e) => {
@@ -34,32 +86,41 @@ input.addEventListener("keydown", (e) => {
     input.value = "";
     command(inputValue);
   }
+  // TODO - add support for arrow up and down
 });
-input.addEventListener("blur", () => setTimeout(() => input.focus()));
+document.body.addEventListener("keydown", () => input.focus());
 
 
 
-function command(command) {
-  commandHistory.push(command);
-  commandsContainer.appendChild(createCommandElement(command));
+function command(inputText) {
+  commandHistory.push(inputText);
+  commandsContainer.appendChild(createCommandElement(inputText));
+
+  const [command, ...args] = inputText.split(" ");
 
   if (Object.keys(commands).includes(command)) {
-    const output = commands[command]();
-    if (output.text) commandsContainer.appendChild(createCommandElement(output.text, output.type));
+    let output = commands[command]();
+    if (typeof output === "string") output = commands[output]();
+    if (output?.text) commandsContainer.appendChild(createCommandElement(output.text, output.type, output.showPrefix));
   } else {
     const output = commands.invalid();
-    commandsContainer.appendChild(createCommandElement(output.text, output.type));
+    commandsContainer.appendChild(createCommandElement(output.text, output.type, output.showPrefix));
   }
 }
 
-function createCommandElement(command, type) {
+function createCommandElement(text, type, showPrefix = true) {
   const container = document.createElement("div");
   container.classList.add("command");
-  if (["error", "warning", "success", "info"].includes(type)) container.classList.add(type);
+  if (TYPES.includes(type)) container.classList.add(type);
 
   const span = document.createElement("span");
-  const timestamp = new Date().toISOString().slice(11, 19);
-  span.textContent = `${timestamp}>${PREFIX} ${command}`;
+  if (showPrefix) {
+    const now = new Date();
+    const timestamp = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
+    span.innerHTML = `${timestamp} ${PREFIX} ${text}`;
+  } else {
+    span.innerHTML = `${text}`;
+  }
   container.appendChild(span);
   return container;
 }

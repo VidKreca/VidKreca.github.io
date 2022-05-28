@@ -1,3 +1,15 @@
+:root {
+  --console-background: rgb(40, 44, 53);
+  --text: rgb(129, 152, 174);
+  --input-text: rgb(129, 152, 174);
+  --prefix-text: rgb(126, 146, 100);
+  --error-text: rgb(201, 102, 112);
+  --warning-text: rgb(200, 157, 112);
+  --success-text: rgb(0, 187, 0);
+  --info-text: rgb(52, 114, 173);
+  --special-text: rgb(132, 136, 146);
+}
+
 body, html {
   box-sizing: border-box;
   margin: 0;
@@ -5,6 +17,7 @@ body, html {
   font-family: 'Courier New', monospace;
   overflow-x: hidden;
   overflow-y: overlay;
+  color: var(--text);
 }
 
 /* Scrollbar styling */
@@ -20,15 +33,15 @@ body, html {
 #consoleContainer {
   width: 100vw;
   min-height: 100vh;
-  background-color: gray;
+  background-color: var(--console-background);
   font-size: 20px;
 }
 
 #inputContainer {
-
+  color: var(--input-text);
 }
 #inputContainer #prefix {
-
+  color: var(--prefix-text);
 }
 /* Remove default styling */
 #inputContainer #input, #inputContainer #input:focus {
@@ -37,6 +50,7 @@ body, html {
   outline: none;
   font-family: 'Courier New', monospace;
   font-size: 1em;
+  color: var(--input-text);
 }
 
 
@@ -44,14 +58,17 @@ body, html {
   white-space: pre;
 }
 #commandsContainer .command.error {
-  color: red;
+  color: var(--error-text);
 }
 #commandsContainer .command.success {
-  color: green;
+  color: var(--success-text);
 }
 #commandsContainer .command.warning {
-  color: yellow;
+  color: var(--warning-text);
 }
 #commandsContainer .command.info {
-  color: blue;
+  color: var(--info-text);
+}
+#commandsContainer .command.special {
+  color: var(--special-text);
 }
