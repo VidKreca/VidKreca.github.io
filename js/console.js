@@ -77,9 +77,9 @@ const commands = {
   "exit": () => {
     history.back();
   },
-  "invalid": () => {  // TODO - add command to args here and print which command was invalid
+  "invalid": (command) => {
     return {
-      text: `Unknown command, please use 'help' for a list of commands.`,
+      text: `Unknown command '${command}', please use 'help' for a list of commands.`,
       type: "error",
       showPrefix: false
     };
@@ -118,7 +118,7 @@ function command(inputText) {
     if (typeof output === "string") output = commands[output]();
     if (output?.text) appendCommand(createCommandElement(output.text, output.type, output.showPrefix));
   } else {
-    const output = commands.invalid();
+    const output = commands.invalid(command);
     appendCommand(createCommandElement(output.text, output.type, output.showPrefix));
   }
 }
