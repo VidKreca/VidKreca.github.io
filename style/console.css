@@ -15,35 +15,54 @@ body, html {
   margin: 0;
   padding: 0;
   font-family: 'Courier New', monospace;
-  overflow-x: hidden;
-  overflow-y: overlay;
   color: var(--text);
+
+  background: gray;
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 1em;
+.container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+#laptop {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 55vw;
+}
+
+#consoleContainer {
+  position: absolute;
+  top: 45vh;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44.5vw;
+  height: 28.5vw;
+
+  overflow-y: auto;
+
+  background-color: var(--console-background);
+  font-size: 20px;
+}
+#consoleContainer::-webkit-scrollbar {
+  width: .5em;
   background-color: transparent;
 }
-::-webkit-scrollbar-thumb {
+#consoleContainer::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 1em;
 }
 
-#consoleContainer {
-  width: 100vw;
-  min-height: 100vh;
-  background-color: var(--console-background);
-  font-size: 20px;
-}
-
+/* INPUT */
 #inputContainer {
   color: var(--input-text);
 }
 #inputContainer #prefix {
   color: var(--prefix-text);
 }
-/* Remove default styling */
 #inputContainer #input, #inputContainer #input:focus {
   border: none;
   background-color: transparent;
@@ -52,8 +71,42 @@ body, html {
   font-size: 1em;
   color: var(--input-text);
 }
+#inputContainer.disabled {
+  display: none;
+}
 
 
+/* GITHUB COMMAND */
+.github-command {
+  padding-left: 1em;
+  font-size: .8em;
+  white-space: initial;
+}
+.github-command h1 {
+  font-size: 1em;
+  color: var(--info-text);
+}
+.github-command .profile {
+  display: flex;
+  align-items: center;
+  gap: .5em;
+}
+.github-command .profile a {
+  color: var(--success-text);
+  text-decoration: none;
+}
+.github-command .profile img {
+  width: 2em;
+}
+.github-command .repos a {
+  font-size: 1em;
+  color: var(--warning-text);
+}
+.github-command .repos p {
+  margin: 0;
+}
+
+/* COMMANDS */
 #commandsContainer .command {
   white-space: pre;
 }
