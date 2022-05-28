@@ -23,6 +23,13 @@ body, html {
   background: gray;
 }
 
+#credit{
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+  color: var(--console-background);
+} 
+
 .container {
   width: 100vw;
   height: 100vh;
