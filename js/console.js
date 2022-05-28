@@ -13,6 +13,7 @@ const input = document.querySelector("#input");
 const inputContainer = document.querySelector("#inputContainer");
 const prefix = document.querySelector("#prefix");
 const commandsContainer = document.querySelector("#commandsContainer");
+const shutdown = document.querySelector(".shutdown");
 
 /** VARIABLES */
 const commandHistory = [];
@@ -62,6 +63,12 @@ const commands = {
       showPrefix: false
     }
   },
+  "echo": (args) => {
+    return {
+      text: args.join(" "),
+      showPrefix: false
+    }
+  },
   "cd": () => {
     return {
       text: `No, I did not implement a file system... yet.`,
@@ -76,6 +83,9 @@ const commands = {
   },
   "exit": () => {
     history.back();
+  },
+  "shutdown": () => {
+    shutdown.classList.remove("hidden");
   },
   "invalid": (command) => {
     return {
@@ -114,7 +124,7 @@ function command(inputText) {
   command = command.trim().toLowerCase();
 
   if (Object.keys(commands).includes(command)) {
-    let output = commands[command]();
+    let output = commands[command](args);
     if (typeof output === "string") output = commands[output]();
     if (output?.text) appendCommand(createCommandElement(output.text, output.type, output.showPrefix));
   } else {
