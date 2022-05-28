@@ -21,9 +21,14 @@ body, html {
 }
 
 .container {
-  position: relative;
   width: 100vw;
   height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.laptopContainer {
+  position: relative;
 }
 
 #laptop {
@@ -31,21 +36,29 @@ body, html {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 55vw;
+
+  width: 900px;
+  height: 600px;
 }
 
+/* CONSOLE CONTAINER */
 #consoleContainer {
   position: absolute;
-  top: 45vh;
+  top: -270px;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 44.5vw;
-  height: 28.5vw;
-
-  overflow-y: auto;
+  transform: translateX(-50%);
 
   background-color: var(--console-background);
   font-size: 20px;
+
+  overflow-x: none;
+  overflow-y: scroll;
+
+  width: 730px;
+  height: 466px;
+}
+#consoleContainer * {
+  word-break: break-all;
 }
 #consoleContainer::-webkit-scrollbar {
   width: .5em;
@@ -108,7 +121,10 @@ body, html {
 
 /* COMMANDS */
 #commandsContainer .command {
-  white-space: pre;
+  white-space: pre-wrap;
+}
+#commandsContainer .command p {
+  margin: 0;
 }
 #commandsContainer .command.error {
   color: var(--error-text);
@@ -124,4 +140,42 @@ body, html {
 }
 #commandsContainer .command.special {
   color: var(--special-text);
+}
+
+
+@media only screen and (max-width: 1000px) {
+  #laptop {
+    width: 630px;
+    height: 420px;
+  }
+  #consoleContainer {
+    top: -190px;
+    width: 510px;
+    height: 327px;
+    font-size: 14px;
+  }
+}
+@media only screen and (max-width: 690px) {
+  #laptop {
+    width: 450px;
+    height: 300px;
+  }
+  #consoleContainer {
+    top: -132px;
+    width: 360px;
+    height: 230px;
+    font-size: 10px;
+  }
+}
+@media only screen and (max-width: 460px) {
+  #laptop {
+    width: 342px;
+    height: 228px;
+  }
+  #consoleContainer {
+    top: -103px;
+    width: 275px;
+    height: 177px;
+    font-size: 8px;
+  }
 }

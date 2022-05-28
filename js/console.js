@@ -25,6 +25,7 @@ const commands = {
   about
   contact
   clear
+  exit
       `,
       type: "info",
       showPrefix: false
@@ -73,6 +74,9 @@ const commands = {
   "clear": () => {
     commandsContainer.innerHTML = "";
   },
+  "exit": () => {
+    history.back();
+  },
   "invalid": () => {  // TODO - add command to args here and print which command was invalid
     return {
       text: `Unknown command, please use 'help' for a list of commands.`,
@@ -107,7 +111,7 @@ function command(inputText) {
   appendCommand(createCommandElement(inputText));
 
   let [command, ...args] = inputText.split(" ");
-  command = command.trim();
+  command = command.trim().toLowerCase();
 
   if (Object.keys(commands).includes(command)) {
     let output = commands[command]();
@@ -129,15 +133,15 @@ function createCommandElement(text, type, showPrefix = true) {
   container.classList.add("command");
   if (TYPES.includes(type)) container.classList.add(type);
 
-  const span = document.createElement("span");
+  const commandElement = document.createElement("p");
   if (showPrefix) {
     const now = new Date();
     const timestamp = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
-    span.innerHTML = `${timestamp} ${PREFIX} ${text}`;
+    commandElement.innerHTML = `${timestamp} ${PREFIX} ${text}`;
   } else {
-    span.innerHTML = `${text}`;
+    commandElement.innerHTML = `${text}`;
   }
-  container.appendChild(span);
+  container.appendChild(commandElement);
   return container;
 }
 
