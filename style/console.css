@@ -1,0 +1,57 @@
+body, html {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Courier New', monospace;
+  overflow-x: hidden;
+  overflow-y: overlay;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 1em;
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 1em;
+}
+
+#consoleContainer {
+  width: 100vw;
+  min-height: 100vh;
+  background-color: gray;
+  font-size: 20px;
+}
+
+#inputContainer {
+
+}
+#inputContainer #prefix {
+
+}
+/* Remove default styling */
+#inputContainer #input, #inputContainer #input:focus {
+  border: none;
+  background-color: transparent;
+  outline: none;
+  font-family: 'Courier New', monospace;
+  font-size: 1em;
+}
+
+
+#commandsContainer .command {
+  white-space: pre;
+}
+#commandsContainer .command.error {
+  color: red;
+}
+#commandsContainer .command.success {
+  color: green;
+}
+#commandsContainer .command.warning {
+  color: yellow;
+}
+#commandsContainer .command.info {
+  color: blue;
+}
