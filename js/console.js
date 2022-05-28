@@ -3,11 +3,13 @@ const PREFIX = "guest@IE-7 $ ";
 const TYPES = ["error", "warning", "success", "info", "special"];
 const START_TEXT = 
 `Welcome to my console.
-Use the 'help' command for a list of available commands.
-Use the 'exit' command to go back.
+Useful commands:
+  'help' for a list of available commands
+  'exit' to go back
 
 `;
 const REPOS = ["QuickSorts", "the-place"];
+const THEMES = ["default", "ubuntu", "cmd", "gray"];
 
 /** ELEMENTS */
 const input = document.querySelector("#input");
@@ -27,6 +29,7 @@ const commands = {
   github
   about
   contact
+  theme
   clear
   exit
       `,
@@ -76,18 +79,64 @@ const commands = {
       text: `No, I did not implement a file system... yet.`,
       type: "error",
       showPrefix: false
-    }
+    };
   },
   "pwd": () => "cd",
   "ls": () => "cd",
   "clear": () => {
     commandsContainer.innerHTML = "";
   },
+  "cls": () => "clear",
   "exit": () => {
     history.back();
   },
   "shutdown": () => {
     shutdown.classList.remove("hidden");
+
+    setTimeout(() => {
+      shutdown.classList.add("hidden");
+      appendCommand(createCommandElement("Could not shut down the computer.", "error", false));
+    }, 6000);
+  },
+  "theme": (args) => {
+    if (args.length === 0) {
+      return {
+        text: `Switch terminal themes.
+Usage: theme {name}
+Available themes: ${THEMES.join(", ")}
+
+Use 'theme test' to test your current theme.`,
+        type: "info",
+        showPrefix: false
+      }
+    }
+
+    if (args.length === 1) {
+      let [theme] = args;
+
+      if (theme === "test") {
+        showThemeShowcase();
+        return;
+      }
+
+      theme = theme.toLowerCase().trim();
+      if (!THEMES.includes(theme)) {
+        return {
+          text: `Invalid theme name '${theme}'.
+Available themes: ${THEMES.join(", ")}`,
+          type: "warning",
+          showPrefix: false
+        }
+      }
+      setTheme(theme);
+      return;
+    }
+
+    return {
+      text: `Please only provide one argument.`,
+      type: "warning",
+      showPrefix: false
+    }
   },
   "invalid": (command) => {
     return {
@@ -211,20 +260,32 @@ async function showGithubInfo() {
 
   const createdAt = new Date(user.created_at);
   const createdAtPretty = `${createdAt.getDate().toString().padStart(2, "0")}.${createdAt.getMonth().toString().padStart(2, "0")}.${createdAt.getFullYear().toString().padStart(2, "0")}`
-  const text = `
-    <div class="github-command">
-      <div class="profile">
+  const text = `<div class="github-command"><div class="profile">
         <img src="${user.avatar_url}">
         <a href="${user.html_url}" target="_blank">My profile</a>
       </div>
       <div class="info">
         <h4>${user.public_repos} public repos</h4>
         <h4>created at ${createdAtPretty}</h4>
-      </div>
-      ${reposText}
-    </div>
-    `;
+      </div>${reposText}</div>
+      `;
     appendCommand(createCommandElement(text, "special", false));
 
   toggleInput(false);
+}
+
+function setTheme(theme) {
+  const name = theme => `${theme}Theme`;
+  THEMES.forEach(theme => document.body.classList.remove(name(theme)))
+
+  if (theme !== "default") document.body.classList.add(name(theme));
+}
+
+function showThemeShowcase() {
+  appendCommand(createCommandElement("regular text", undefined, false));
+  appendCommand(createCommandElement("success text", "success", false));
+  appendCommand(createCommandElement("info text", "info", false));
+  appendCommand(createCommandElement("warning text", "warning", false));
+  appendCommand(createCommandElement("error text", "error", false));
+  appendCommand(createCommandElement("special text", "special", false));
 }

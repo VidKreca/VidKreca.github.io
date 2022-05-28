@@ -5,10 +5,45 @@
   --prefix-text: rgb(126, 146, 100);
   --error-text: rgb(201, 102, 112);
   --warning-text: rgb(200, 157, 112);
-  --success-text: rgb(0, 187, 0);
+  --success-text: rgb(136, 226, 52);
   --info-text: rgb(52, 114, 173);
+  --special-text: rgb(144, 144, 144);
+}
+.ubuntuTheme {
+  --console-background: rgb(45, 9, 34);
+  --text: rgb(255, 255, 255);
+  --input-text: rgb(255, 255, 255);
+  --prefix-text: rgb(115, 159, 208);
+  --error-text: rgb(157, 21, 35);
+  --warning-text: rgb(157, 78, 21);
+  --success-text: rgb(0, 187, 0);
+  --info-text: rgb(115, 159, 208);
   --special-text: rgb(132, 136, 146);
 }
+.cmdTheme {
+  --console-background: black;
+  --text: white;
+  --input-text: white;
+  --prefix-text: white;
+  --error-text: white;
+  --warning-text: white;
+  --success-text: white;
+  --info-text: white;
+  --special-text: white;
+}
+.grayTheme {
+  --console-background: rgb(83, 83, 83);
+  --text: rgb(189, 189, 189);
+  --input-text: rgb(189, 189, 189);
+  --prefix-text: rgb(0, 0, 0);
+  --error-text: rgb(0, 0, 0);
+  --warning-text: rgb(34, 34, 34);
+  --success-text: rgb(255, 255, 255);
+  --info-text: rgb(173, 173, 173);
+  --special-text: rgb(255, 255, 255);
+}
+
+
 .hidden {
   display: none !important;
 }
@@ -22,6 +57,13 @@ body, html {
 
   background: gray;
 }
+
+#credit{
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+  color: var(--console-background);
+} 
 
 .container {
   width: 100vw;
