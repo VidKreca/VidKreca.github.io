@@ -195,6 +195,12 @@ body, html {
 #commandsContainer .prefix {
   color: var(--prefix-text);
 }
+#commandsContainer .very-special {
+  background-image: linear-gradient(to left, violet, indigo, blue, green, yellow, orange, red);   
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
 
 
 /* SHUTDOWN */

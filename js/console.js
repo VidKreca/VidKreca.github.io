@@ -2,7 +2,7 @@ import FileSystem from "./fileSystem.js";
 
 /** CONSTANTS */
 const PREFIX = "guest@IE-7 $ ";
-const TYPES = ["error", "warning", "success", "info", "special"];
+const TYPES = ["error", "warning", "success", "info", "special", "prefix", "very-special"];
 const START_TEXT = 
 `Welcome to my console.
 Useful commands:
@@ -49,7 +49,10 @@ const commands = {
     };
   },
   "man": (args) => {
-
+    return {
+      text: `<span class="very-special">Can't be bothered to write this to be honest...</span>`,
+      type: "custom"
+    }
   },
   "github": () => {
     toggleInput(false);
@@ -354,12 +357,14 @@ function setTheme(theme) {
 }
 
 function showThemeShowcase() {
+  appendCommand(createCommandElement("prefix text", "prefix", false));
   appendCommand(createCommandElement("regular text", undefined, false));
   appendCommand(createCommandElement("success text", "success", false));
   appendCommand(createCommandElement("info text", "info", false));
   appendCommand(createCommandElement("warning text", "warning", false));
   appendCommand(createCommandElement("error text", "error", false));
   appendCommand(createCommandElement("special text", "special", false));
+  appendCommand(createCommandElement("very special text woooooooooooow", "very-special", false));
 }
 
 
