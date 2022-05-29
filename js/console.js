@@ -101,7 +101,10 @@ const commands = {
     try {
       const directory = FileSystem.list(!!args.join(" ") ? args.join(" ") : undefined);
       return {
-        text: `${Object.keys(directory).join("\n")}`
+        text: `${Object.entries(directory).map(([key, value]) => {
+          if (typeof value === "object") return `<span class="info">${key}</span>`;
+          return `<span class="success">${key}</span>`;
+        }).join("\n")}`
       }
     } catch (err) {
       return {
