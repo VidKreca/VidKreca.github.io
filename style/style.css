@@ -82,7 +82,7 @@ body {
 
 /* Terminal button */
 .console-button {
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 1.5em;
     z-index: 999;

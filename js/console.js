@@ -72,7 +72,8 @@ const commands = {
   },
   "contact": () => {
     return {
-      text: `Not looking for new friends right now...`,
+      text: `Not looking for new friends right now...
+<a class="special" href="mailto:${atob("dmlka3JlY2E4ODRAZ21haWwuY29t")}?subject=From terminal">Click here to send me an email anyways</a>`,
       type: "warning"
     }
   },
@@ -173,7 +174,7 @@ const commands = {
     setTimeout(() => {
       shutdown.classList.add("hidden");
       appendCommand(createCommandElement("Could not shut down the computer.", "error", false));
-    }, 6000);
+    }, 5000);
   },
   "theme": (args) => {
     if (args.length === 0) {
