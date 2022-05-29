@@ -1,31 +1,37 @@
 /**
- * SHOULD SUPPORT:
- * - ls
+ * TODO:
  * - md
- * - touch
- * - cd
  * - rm
- * - cat
  * 
  * IDEAS:
- * - add localStorage support
+ * - add localStorage support (implementation idea: proxy the root object)
  */
 class FileSystem {
   constructor() {
     this.root = {
-      "file1": "file1 contents...",
-      "folder1": {
-        "file2": "file2 contents...",
-        "folder2": {}
+      "README": "I don't have anything important to say.",
+      "secrets": {
+        "my_passwords": "reddit: hunter2",
+        "empty_folder": {
+          "i_lied": ""
+        }
       }
     };       // Root folder
     this.pointer = null;  // Pointer to currently selected directory
   }
 
+  /**
+   * Formatted current pointer
+   */
   get currentDirectory() {
-    return `./${this.pointer ?? ""}`;
+    return `./${(this.pointer ?? "").replace(".", "/")}`;
   }
 
+  /**
+   * Convert a string pointer value into the actual object value 
+   * @param {*} pointer string pointer value
+   * @returns object or file contents
+   */
   pointerValue(pointer) {
     if (pointer === null || pointer === "") return this.root;
     const value = pointer.split(".").reduce((o, i) => o?.[i], this.root);
@@ -65,14 +71,58 @@ class FileSystem {
     return currentPointer.join(".");
   }
 
-  makeFile() {}
-  makeFolder() {}
+  /**
+   * Make a new file
+   * @param {*} relativePath relative path to file with file name
+   * @param {*} content content to write into the file
+   * @returns file name
+   */
+  makeFile(relativePath, content = "") {
+    if (!relativePath) throw new Error(`Please provide a single file path`);
+
+    relativePath = relativePath.split("/");
+    const fileName = relativePath.pop();
+
+    const folderPointer = relativePath.length > 0 ? this.parseRelativePathToFolder(relativePath.join("/")) : this.pointer;
+    const folder = this.pointerValue(folderPointer);
+
+    if (typeof folder !== "object") throw new Error(`Path '${folderPointer}' does not lead to a folder`);
+    if (folder[fileName] !== undefined) throw new Error(`File '${fileName}' already exists in folder '${folderPointer}'`)
+
+    folder[fileName] = content;
+
+    return fileName;
+  }
+
+  /**
+   * Make a new folder
+   * @param {*} relativePath relative path to folder
+   * @returns folder name
+   */
+  makeFolder(relativePath) {
+    if (!relativePath) throw new Error(`Please provide a single folder path`);
+
+    relativePath = relativePath.split("/");
+    const folderName = relativePath.pop();
+
+    const folderPointer = relativePath.length > 0 ? this.parseRelativePathToFolder(relativePath.join("/")) : this.pointer;
+    const folder = this.pointerValue(folderPointer);
+
+    if (typeof folder !== "object") throw new Error(`Path '${folderPointer}' does not lead to an existing folder`);
+    if (folder[folderName] !== undefined) throw new Error(`Folder '${folderName}' already exists in folder '${folderPointer}'`)
+
+    folder[folderName] = {};
+
+    return folderName;
+  }
 
   /**
    * Returns an object of the current directory
    */
   list(pointer) {
-    return this.pointerValue(pointer ?? this.pointer);
+    const contents = this.pointerValue(pointer ?? this.pointer);
+    if (Object.keys(contents).length === 0) throw new Error("Directory is empty");
+    return contents;
   }
 
   /**

@@ -192,6 +192,9 @@ body, html {
 #commandsContainer .special {
   color: var(--special-text);
 }
+#commandsContainer .prefix {
+  color: var(--prefix-text);
+}
 
 
 /* SHUTDOWN */

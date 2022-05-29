@@ -38,13 +38,14 @@ const commands = {
   <span class="info">cd</span>          - change working directory
   <span class="info">pwd</span>         - print current working directory
   <span class="info">ls</span>          - list current directory contents
+  <span class="info">touch</span>       - make a new file
+  <span class="info">md</span>          - make a new folder
   <span class="info">javascript</span>  - run javascript code
   <span class="info">clear</span>       - clear all terminal text
   <span class="info">exit</span>        - exit the terminal
   <span class="info">shutdown</span>    - shutdown the computer
       `,
-      type: "custom",
-      showPrefix: false
+      type: "custom"
     };
   },
   "man": (args) => {
@@ -63,52 +64,46 @@ const commands = {
       <span class="error">|</span>     from Maribor, Slovenia.    <span class="error">|</span>
       <span class="error">|________________________________|</span>
       `,
-      type: "info",
-      showPrefix: false
+      type: "info"
     };
   },
   "contact": () => {
     return {
       text: `Not looking for new friends right now...`,
-      type: "warning",
-      showPrefix: false
+      type: "warning"
     }
   },
   "echo": (args) => {
     return {
-      text: args.join(" "),
-      showPrefix: false
+      text: args.join(" ")
     }
   },
   "cd": (args) => {
     try {
       FileSystem.changeDirectory(args.join(" "));
+      updatePrefixDirectory(FileSystem.currentDirectory);
     } catch (err) {
       return {
         text: err.message,
-        type: "error",
-        showPrefix: false
+        type: "error"
       }
     }
   },
   "pwd": () => {
     return {
-      text: `${FileSystem.currentDirectory}`,
-      showPrefix: false
+      text: `${FileSystem.currentDirectory}`
     }
   },
   "ls": (args) => {
     try {
       const directory = FileSystem.list(!!args.join(" ") ? args.join(" ") : undefined);
       return {
-        text: `${Object.keys(directory).join("\n")}`,
-        showPrefix: false
+        text: `${Object.keys(directory).join("\n")}`
       }
     } catch (err) {
       return {
         text: err.message,
-        type: "error",
-        showPrefix: false
+        type: "error"
       }
     }
   },
@@ -116,14 +111,46 @@ const commands = {
     try {
       const fileContents = FileSystem.getFileContents(!!args.join(" ") ? args.join(" ") : undefined)
       return {
-        text: `${fileContents}`,
-        showPrefix: false
+        text: `${fileContents}`
       }
     } catch (err) {
       return {
         text: err.message,
-        type: "error",
-        showPrefix: false
+        type: "error"
+      }
+    }
+  },
+  "touch": (args) => {
+    try {
+      let [filePath, ...content] = args;
+      content = content.join(" ");
+
+      const fileName = FileSystem.makeFile(filePath, content);
+
+      return {
+        text: `File '${fileName}' created`,
+        type: "success"
+      }
+    } catch (err) {
+      return {
+        text: err.message,
+        type: "error"
+      }
+    }
+  },
+  "md": (args) => {
+    try {
+      let [folderPath] = args;
+      const folderName = FileSystem.makeFolder(folderPath);
+
+      return {
+        text: `Folder '${folderName}' created`,
+        type: "success"
+      }
+    } catch (err) {
+      return {
+        text: err.message,
+        type: "error"
       }
     }
   },
@@ -150,8 +177,7 @@ Usage: theme {name}
 Available themes: ${THEMES.join(", ")}
 
 Use 'theme test' to test your current theme.`,
-        type: "info",
-        showPrefix: false
+        type: "info"
       }
     }
 
@@ -168,8 +194,7 @@ Use 'theme test' to test your current theme.`,
         return {
           text: `Invalid theme name '${theme}'.
 Available themes: ${THEMES.join(", ")}`,
-          type: "warning",
-          showPrefix: false
+          type: "warning"
         }
       }
       setTheme(theme);
@@ -178,15 +203,13 @@ Available themes: ${THEMES.join(", ")}`,
 
     return {
       text: `Please only provide one argument.`,
-      type: "warning",
-      showPrefix: false
+      type: "warning"
     }
   },
   "javascript": (args) => {
     if (args.length === 0) return {
       text: `Please provide some JavaScript code to run.`,
-      type: "error",
-      showPrefix: false
+      type: "error"
     }
 
     eval(args.join(" "));
@@ -194,14 +217,13 @@ Available themes: ${THEMES.join(", ")}`,
   "invalid": (command) => {
     return {
       text: `Unknown command '${command}', please use 'help' for a list of commands.`,
-      type: "error",
-      showPrefix: false
+      type: "error"
     };
   }
 };
 
 /** DEFAULT ELEMENT SETUP */
-prefix.textContent = PREFIX;
+updatePrefixDirectory(FileSystem.currentDirectory);
 if (START_TEXT) appendCommand(createCommandElement(START_TEXT, "special", false));
 
 /** EVENT LISTENERS */
@@ -232,7 +254,10 @@ document.body.addEventListener("keydown", () => {
 
 function command(inputText) {
   commandHistory.push(inputText);
-  appendCommand(createCommandElement(inputText));
+  const now = new Date();
+  const timestamp = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
+  const commandLogText = `${timestamp} ${prefix.textContent}`;
+  appendCommand(createCommandElement(`<span class="prefix">${commandLogText}</span> ${inputText}`, "custom"));
 
   let [command, ...args] = inputText.split(" ");
   command = command.trim().toLowerCase();
@@ -240,10 +265,10 @@ function command(inputText) {
   if (Object.keys(commands).includes(command)) {
     let output = commands[command](args);
     if (typeof output === "string") output = commands[output]();
-    if (output?.text) appendCommand(createCommandElement(output.text, output.type, output.showPrefix));
+    if (output?.text) appendCommand(createCommandElement(output.text, output.type));
   } else {
     const output = commands.invalid(command);
-    appendCommand(createCommandElement(output.text, output.type, output.showPrefix));
+    appendCommand(createCommandElement(output.text, output.type));
   }
 }
 
@@ -252,19 +277,13 @@ function appendCommand(element) {
   input.scrollIntoView();
 }
 
-function createCommandElement(text, type, showPrefix = true) {
+function createCommandElement(text, type) {
   const container = document.createElement("div");
   container.classList.add("command");
   if (TYPES.includes(type)) container.classList.add(type);
 
   const commandElement = document.createElement("p");
-  if (showPrefix) {
-    const now = new Date();
-    const timestamp = `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
-    commandElement.innerHTML = `${timestamp} ${PREFIX} ${text}`;
-  } else {
-    commandElement.innerHTML = `${text}`;
-  }
+  commandElement.innerHTML = `${text}`;
   container.appendChild(commandElement);
   return container;
 }
@@ -341,4 +360,9 @@ function showThemeShowcase() {
   appendCommand(createCommandElement("warning text", "warning", false));
   appendCommand(createCommandElement("error text", "error", false));
   appendCommand(createCommandElement("special text", "special", false));
+}
+
+
+function updatePrefixDirectory(directory) {
+  prefix.textContent = `${directory} ${PREFIX}`;
 }
