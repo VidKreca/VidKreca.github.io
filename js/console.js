@@ -235,20 +235,28 @@ if (START_TEXT) appendCommand(createCommandElement(START_TEXT, "special", false)
 /** EVENT LISTENERS */
 input.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
+    e.preventDefault();
     const inputValue = input.value;
     input.value = "";
     command(inputValue);
     commandIndex = null;
   }
   else if (e.key === "ArrowUp") {
+    e.preventDefault();
     if (commandHistory.length <= commandIndex) return;
     commandIndex++;
     input.value = commandHistory[commandHistory.length - commandIndex];
   }
   else if (e.key === "ArrowDown") {
+    e.preventDefault();
     if (commandIndex <= 0) return;
     commandIndex--;
     input.value = commandHistory[commandHistory.length - commandIndex] ?? "";
+  }
+  else if (e.key === "Tab") {
+    e.preventDefault();
+    // TODO - autocomplete here
+    // console.log("tab pressed");
   }
 });
 document.body.addEventListener("keydown", () => {
