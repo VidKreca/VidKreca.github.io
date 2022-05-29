@@ -177,19 +177,19 @@ body, html {
 #commandsContainer .command p {
   margin: 0;
 }
-#commandsContainer .command.error {
+#commandsContainer .error {
   color: var(--error-text);
 }
-#commandsContainer .command.success {
+#commandsContainer .success {
   color: var(--success-text);
 }
-#commandsContainer .command.warning {
+#commandsContainer .warning {
   color: var(--warning-text);
 }
-#commandsContainer .command.info {
+#commandsContainer .info {
   color: var(--info-text);
 }
-#commandsContainer .command.special {
+#commandsContainer .special {
   color: var(--special-text);
 }
 

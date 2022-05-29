@@ -26,16 +26,24 @@ let commandIndex = 0;
 const commands = {
   "help": () => {
     return {
-      text: `AVAILABLE COMMANDS:
-  help
-  github
-  about
-  contact
-  theme
-  clear
-  exit
+      text: `<span class="success">AVAILABLE COMMANDS:</span>
+  <span class="info">help</span>        - show this text
+  <span class="info">github</span>      - show my github info
+  <span class="info">about</span>       - something about me
+  <span class="info">contact</span>     - my contact info
+  <span class="info">theme</span>       - change terminal theme
+  <span class="info">man</span>         - show manuals for different commands
+  <span class="info">echo</span>        - print text to the terminal
+  <span class="info">cat</span>         - print file contents to the terminal
+  <span class="info">cd</span>          - change working directory
+  <span class="info">pwd</span>         - print current working directory
+  <span class="info">ls</span>          - list current directory contents
+  <span class="info">javascript</span>  - run javascript code
+  <span class="info">clear</span>       - clear all terminal text
+  <span class="info">exit</span>        - exit the terminal
+  <span class="info">shutdown</span>    - shutdown the computer
       `,
-      type: "info",
+      type: "custom",
       showPrefix: false
     };
   },
@@ -48,12 +56,12 @@ const commands = {
   },
   "about": () => {
     return {
-      text: `       ________________________________
-      |                                |
-      |     Hello, I'm Vid Kreča,      |
-      |     a full-stack developer     |
-      |     from Maribor, Slovenia.    |
-      |________________________________|
+      text: `       <span class="error">________________________________</span>
+      <span class="error">|</span>                                <span class="error">|</span>
+      <span class="error">|</span>     Hello, I'm <span class="success">Vid Kreča</span>,      <span class="error">|</span>
+      <span class="error">|</span>     a full-stack developer     <span class="error">|</span>
+      <span class="error">|</span>     from Maribor, Slovenia.    <span class="error">|</span>
+      <span class="error">|________________________________|</span>
       `,
       type: "info",
       showPrefix: false
@@ -63,13 +71,6 @@ const commands = {
     return {
       text: `Not looking for new friends right now...`,
       type: "warning",
-      showPrefix: false
-    }
-  },
-  "secret": () => {
-    return {
-      text: `Unlisted commands: echo, cd, pwd, ls, shutdown`,
-      type: "special",
       showPrefix: false
     }
   },
@@ -182,6 +183,12 @@ Available themes: ${THEMES.join(", ")}`,
     }
   },
   "javascript": (args) => {
+    if (args.length === 0) return {
+      text: `Please provide some JavaScript code to run.`,
+      type: "error",
+      showPrefix: false
+    }
+
     eval(args.join(" "));
   },
   "invalid": (command) => {
