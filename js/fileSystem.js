@@ -1,6 +1,5 @@
 /**
  * TODO:
- * - md
  * - rm
  * 
  * IDEAS:
@@ -139,6 +138,7 @@ class FileSystem {
 
     if (typeof folder !== "object") throw new Error(`Path '${folderPointer}' does not lead to a folder`);
     if (folder[fileName] === undefined) throw new Error(`File '${fileName}' does not exist in folder '${folderPointer}'`)
+    if (typeof folder[fileName] === "object") throw new Error(`'${fileName}' is a folder, not a file`)
 
     return folder[fileName];
   }
