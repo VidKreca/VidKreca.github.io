@@ -117,6 +117,11 @@ body, html {
 /* INPUT */
 #inputContainer {
   color: var(--input-text);
+  width: 100%;
+  display: flex;
+  gap: .5em;
+  justify-content: flex-start;
+  align-items: center;
 }
 #inputContainer #prefix {
   color: var(--prefix-text);
@@ -128,6 +133,7 @@ body, html {
   font-family: 'Courier New', monospace;
   font-size: 1em;
   color: var(--input-text);
+  flex-grow: 1;
 }
 #inputContainer.disabled {
   display: none;

@@ -1,3 +1,5 @@
+import FileSystem from "./fileSystem.js";
+
 /** CONSTANTS */
 const PREFIX = "guest@IE-7 $ ";
 const TYPES = ["error", "warning", "success", "info", "special"];
@@ -74,15 +76,38 @@ const commands = {
       showPrefix: false
     }
   },
-  "cd": () => {
-    return {
-      text: `No, I did not implement a file system... yet.`,
-      type: "error",
-      showPrefix: false
-    };
+  "cd": (args) => {
+    try {
+      FileSystem.changeDirectory(args.join(" "));
+    } catch (err) {
+      return {
+        text: err.message,
+        type: "error",
+        showPrefix: false
+      }
+    }
   },
-  "pwd": () => "cd",
-  "ls": () => "cd",
+  "pwd": () => {
+    return {
+      text: `${FileSystem.pointer}`,
+      showPrefix: false
+    }
+  },
+  "ls": (args) => {
+    try {
+      const directory = FileSystem.list(!!args.join(" ") ? args.join(" ") : undefined);
+      return {
+        text: `${Object.keys(directory).join("\n")}`,
+        showPrefix: false
+      }
+    } catch (err) {
+      return {
+        text: err.message,
+        type: "error",
+        showPrefix: false
+      }
+    }
+  },
   "clear": () => {
     commandsContainer.innerHTML = "";
   },
@@ -137,6 +162,9 @@ Available themes: ${THEMES.join(", ")}`,
       type: "warning",
       showPrefix: false
     }
+  },
+  "javascript": (args) => {
+    eval(args.join(" "));
   },
   "invalid": (command) => {
     return {
