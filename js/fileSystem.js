@@ -1,22 +1,49 @@
+const DEFAULT_ROOT = {
+  "README": "I don't have anything important to say.",
+  "secrets": {
+    "my_passwords": "reddit: hunter2",
+    "empty_folder": {
+      "i_lied": ""
+    }
+  }
+};
+
 /**
  * TODO:
  * - rm
- * 
- * IDEAS:
- * - add localStorage support (implementation idea: proxy the root object)
  */
 class FileSystem {
   constructor() {
-    this.root = {
-      "README": "I don't have anything important to say.",
-      "secrets": {
-        "my_passwords": "reddit: hunter2",
-        "empty_folder": {
-          "i_lied": ""
-        }
-      }
-    };       // Root folder
+    this.loadFromStorage();
     this.pointer = null;  // Pointer to currently selected directory
+  }
+
+  /**
+   * Saves the root object to local storage
+   */
+  saveToStorage() {
+    localStorage.setItem("root", JSON.stringify(this.root));
+  }
+
+  /**
+   * Loads the root object from local storage
+   */
+  loadFromStorage() {
+    const save = () => this.saveToStorage();
+
+    const stored = localStorage.getItem("root");
+    const parsed = stored !== null ? JSON.parse(stored) : DEFAULT_ROOT;
+    this.root = new Proxy(parsed, {
+      set(obj, key, value) {
+        obj[key] = value;
+        save();
+        return true;
+      },
+      deleteProperty(obj, key) {
+        delete obj[key];
+        save();
+      }
+    });
   }
 
   /**
