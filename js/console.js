@@ -39,6 +39,9 @@ const commands = {
       showPrefix: false
     };
   },
+  "man": (args) => {
+
+  },
   "github": () => {
     toggleInput(false);
     showGithubInfo();
@@ -89,7 +92,7 @@ const commands = {
   },
   "pwd": () => {
     return {
-      text: `${FileSystem.pointer}`,
+      text: `${FileSystem.currentDirectory}`,
       showPrefix: false
     }
   },
@@ -98,6 +101,21 @@ const commands = {
       const directory = FileSystem.list(!!args.join(" ") ? args.join(" ") : undefined);
       return {
         text: `${Object.keys(directory).join("\n")}`,
+        showPrefix: false
+      }
+    } catch (err) {
+      return {
+        text: err.message,
+        type: "error",
+        showPrefix: false
+      }
+    }
+  },
+  "cat": (args) => {
+    try {
+      const fileContents = FileSystem.getFileContents(!!args.join(" ") ? args.join(" ") : undefined)
+      return {
+        text: `${fileContents}`,
         showPrefix: false
       }
     } catch (err) {
