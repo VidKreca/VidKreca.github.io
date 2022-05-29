@@ -257,7 +257,11 @@ input.addEventListener("keydown", (e) => {
   else if (e.key === "Tab") {
     e.preventDefault();
     // TODO - autocomplete here
-    // console.log("tab pressed");
+    const { value } = input;
+
+    if ((value.match(/ /g) ?? []).length === 0) {
+      // Autocomplete command
+    }
   }
 });
 document.body.addEventListener("keydown", () => {
@@ -282,6 +286,7 @@ function command(inputText) {
     if (typeof output === "string") output = commands[output]();
     if (output?.text) appendCommand(createCommandElement(output.text, output.type));
   } else {
+    if (command === "") return;
     const output = commands.invalid(command);
     appendCommand(createCommandElement(output.text, output.type));
   }
